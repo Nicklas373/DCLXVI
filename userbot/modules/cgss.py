@@ -30,14 +30,30 @@ async def get_cgss(cgss):
                 await cgss.edit("No DB service was available!...")
                 version="NULL"
             else:
-                await cgss.edit("Starlight kirara was down...")
                 await cgss.edit("Getting game version from esterTion source...")
                 url="https://raw.githubusercontent.com/esterTion/cgss_master_db_diff/master/!TruthVersion.txt"
                 r=requests.get(url)
                 version=r.text.rstrip()
 
+            await cgss.edit("Getting game version from local repository...")
+            url="https://raw.githubusercontent.com/Nicklas373/CGSS_ACB_Downloader/master/Static_version"
+            r=requests.get(url)
+            old_version=r.text.rstrip()
+
+            if (version > old_version):
+                reason="Local DB older than Dynamic DB!"
+            elif (version == old_version):
+                reason="Local DB on latest version!"
+            elif (version < old_version):
+                reason="Local DB higher than Dynamic DB, ERROR"
+
             result=(
-                    f"**DB Version** : `{version}`"
+                    f"**CGSS DB Manifest Ver.**\n"
+                    f"\n"
+                    f"**Local DB Ver.** : `{old_version}`\n"
+                    f"**Online DB Ver.** : `{version}`\n"
+                    f"**Status** : `{reason}`\n"
+                    f"\n"
                     )
             await cgss.edit(result)
 
